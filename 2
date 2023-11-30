@@ -1,0 +1,39 @@
+# Three lines to make our compiler able to draw:
+import sys
+import matplotlib
+matplotlib.use('Agg')
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Assuming you have a CSV file with weather data named "weather_data.csv"
+weather_data = pd.read_csv("data.csv", header=0, sep=",")
+
+x = weather_data["Temperature"]
+y = weather_data["Rainfall"]
+
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+
+def myfunc(x):
+    return slope * x + intercept
+
+mymodel = list(map(myfunc, x))
+
+print(mymodel)
+
+plt.scatter(x, y)
+plt.plot(x, mymodel)
+plt.ylim(ymin=0, ymax=max(y) + 1)  # Adjust the y-axis limit based on your data
+plt.xlim(xmin=min(x) - 1, xmax=max(x) + 1)  # Adjust the x-axis limit based on your data
+plt.xlabel("Temperature")
+plt.ylabel("Rainfall")
+plt.show()
+
+# Two lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+
+#Two lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
